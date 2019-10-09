@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset = "utf-8">
+    <title>Joe's Hotdogs</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<h1>Joe's Hotdogs</h1>
+
+<body>
+    <script language = "javascript" type = "text/javascript">
+        var prices = {Hotdogs: 3.25, Fries: 2.00, Drinks: 1.50};
+        var quantity = {Hotdogs: 0, Fries: 0, Drinks: 0};
+
+        //loop to create submit forms
+        document.write("Place your order: <br><br>");
+        for (var index in prices)
+        {
+            document.write(index + ": $" + prices[index] + " each <br>");
+            document.write("Quantity: ");
+            var element = document.createElement("input");
+            element.setAttribute("type", "text");
+            element.setAttribute("id", index);
+            element.setAttribute("style", "width: 50px");
+            document.body.appendChild(element);
+            document.write("<br><br>");
+        }
+        
+        var totalprice = 0;
+        var subtotal = 0;
+        var parsedQuantity;
+        var discountThresh = 20;
+        var discountPcnt = 10;
+        var discountAmnt = 0;
+        var taxPcnt = 6.25;
+        var taxAmnt = 0;
+
+        function calcOrder()
+        {
+            //init all values;
+            totalprice = 0;
+            subtotal = 0;
+            discountAmnt = 0;
+            taxAmnt = 0;
+            
+            for (var index in quantity)
+            {
+                if (document.getElementById(index).value.length == 0 
+                    || isNaN(document.getElementById(index).value))
+                {
+                    //if field is empty or NaN, default to 0
+                    parsedQuantity = 0;
+                } else {
+                    //update quantity accordingly
+                    parsedQuantity = document.getElementById(index).value;
+                }
+                quantity[index] = parsedQuantity;
+
+                //incrememt price total
+                subtotal += quantity[index] * prices[index];
+            }
+            totalprice = checkdiscount(subtotal);
+            totalprice = applytax(totalprice);
+            totalprice = +(totalprice.toFixed(2)); //round to 2nd decimal place
+
+            alert("Thanks for placing your order!\n\nOrder details:\n\n" 
+                + "Hotdogs: " + quantity.Hotdogs + " -- $" + quantity.Hotdogs * prices.Hotdogs + "\n"
+                + "Fries: " + quantity.Fries + " -- $" + quantity.Fries * prices.Fries + "\n"
+                + "Drinks: " + quantity.Drinks + " -- $" + quantity.Drinks * prices.Drinks + "\n\n"
+                + "Subtotal: $" + subtotal + "\n\n"
+                + "Discount applied: -$" +  discountAmnt + "\n"
+                + "Tax: $" +  taxAmnt + "\n"
+                + "Final Sale: $" +  totalprice + "\n"
+                );
+        }
+        function checkdiscount(price)
+        {
+            if (price >= discountThresh)
+            {
+                discountAmnt = +((price * (discountPcnt/100)).toFixed(2));
+                return price -= discountAmnt;
+            }
+            return price;
+        }
+
+        function applytax(price)
+        {
+            taxAmnt = +((price * (taxPcnt/100)).toFixed(2));
+            return price += taxAmnt;
+        }
+    </script>
+	<form >
+            <input type = 'button' value ='Order' onclick="calcOrder()">
+    </form>
+</body>
+
+</html>

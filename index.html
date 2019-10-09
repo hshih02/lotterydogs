@@ -1,0 +1,144 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Quick Pick</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<h1>Quick Pick</h1>
+
+<body>
+    <script language="javascript" type="text/javascript">
+        var numberarr = [5];
+        var min = 1;
+        var max1 = 48;
+        var max2 = 18;
+
+        //set first 5 values
+        for (i = 0; i < 5; i++) 
+        {
+            n = Math.random() * (+max1 - +min) + min;
+            n = Math.round(n);
+            numberarr[i] = n;
+        }
+        var fivearr = [4];
+        fivearr = numberarr.slice(); //save original five numbers for reference
+
+        //set lucky ball number
+        n = Math.random() * (+max2 - +min) + min;
+        n = Math.round(n);
+        lucky = n; //save lucky ball number for reference
+        numberarr[5] = n;
+
+        //output array
+        for (i = 0; i < 6; i++) 
+        {
+            document.write("Number " + (i + 1) + " is: " + numberarr[i] + "<br>");
+        }
+        document.write("<br>");
+
+        //sort array numerically
+        numberarr.sort(function (a, b) { return a - b });
+
+        //output sorted
+        document.write("Sorted numbers:" + "<br>");
+        for (i = 0; i < 6; i++) 
+        {
+            document.write("Number " + (i + 1) + " is: " + numberarr[i] + "<br>");
+        }
+        document.write("<br>");
+    </script>
+    <form>
+        Enter five numbers (range 1-48) separated by a space:
+        <br>
+        <input type="text" id="fiveno">
+        <br>
+        Enter Lucky Ball number (range 1-18):
+        <br>
+        <input type="text" id="luckyno">
+        <br>
+        <input type='submit' onclick='checkWin()' value="Did you win?">
+    </form>
+    <script language="javascript" type="text/javascript">
+        function checkWin() 
+        {
+            //parse values from text boxes, store in valparse
+            valfive = document.getElementById("fiveno").value;
+            var valparse = [4];
+            valparse = valfive.split(" ", 5);
+            vallucky = document.getElementById("luckyno").value;
+            var valluckyparse = vallucky.split(" ", 1);
+            
+            //account for lucky ball number separately
+            var islucky = 0;
+            if (lucky == valluckyparse) 
+            {
+                islucky = 10;
+            }
+            var matches = 0;
+
+            //compare the 5 input numbers to winning numbers
+            for (i = 0; i < 5; i++) 
+            {
+                for (j = 0; j < 5; j++)
+                {
+                    if (fivearr[i] == valparse[j])
+                    {
+                        matches++;
+                        valparse[j] = undefined; //set undefined to avoid duplicate matches
+                        break;
+                    }
+                }
+            }
+
+            // document.write("matches :" + matches + "<br>");
+
+            var checkSum = matches + islucky;
+
+            switch(checkSum)
+            {
+                case 10:
+                    alert("You won $4!");
+                    break;
+                case 11:
+                    alert("You won $6!");
+                    break;
+                case 2:
+                    alert("You won $3!");
+                    break;
+                case 12:
+                    alert("You won $25!");
+                    break;
+                case 3:
+                    alert("You won $20!");
+                    break;
+                case 13:
+                    alert("You won $150!");
+                    break;
+                case 4:
+                    alert("You won $200!");
+                    break;
+                case 14:
+                    alert("You won $5,000!");
+                    break;
+                case 5:
+                    alert("You won $25,000 a YEAR for LIFE!");
+                    break;
+                case 15:
+                    alert("You won $7,000 a WEEK for LIFE!");
+                    break;
+                default:
+                    alert("Sorry, try again next time!")
+                    break;
+            }
+        }
+
+    </script>
+
+    <ul>
+        <li><a href="./hotdogs.html">SPEND YOUR WINNINGS ON HOTDOGS</a></li>
+    </ul>
+</body>
+
+</html>
